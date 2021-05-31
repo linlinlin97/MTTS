@@ -23,14 +23,7 @@ class GLB_agent():
         self.Xs = []
         self.XX = []
         self.Ys = []
-#         self.new_Xs = []
-#         self.new_Ys = []
-#         self.first = 1
         self.seed = 42
-#         self.clf = LogisticRegression(random_state = 0
-#                          , fit_intercept = False
-#                               , warm_start = True
-#                         , penalty = 'none')
         self.clf = SGDClassifier(max_iter=1000, tol=1e-3, loss = "log", fit_intercept = False, random_state = 42, warm_start = True)
 
         self.theta_mean = ones(p)
@@ -62,31 +55,15 @@ class GLB_agent():
         return self.A
         
     def receive_reward(self, i, t, A, R, X):
-        # update_data. update posteriors
         x = X[A]
         self.Xs.append(x)
         self.Ys.append(R)
-#         self.new_Xs.append(x)
-#         self.new_Ys.append(R)
         self.XX.append(np.outer(x, x))
         if len(set(self.Ys)) > 1 and self.cnt % self.retrain_freq == 0:
-            ## dominating the computation
-#             if self.first:
             self.clf.fit(self.Xs, self.Ys)
-#             self.first = 0
-#             else:
-#                 self.clf.partial_fit(self.new_Xs, self.new_Ys)
-#                 self.new_Xs = []
-#                 self.new_Ys = []
             self.theta_mean = self.clf.coef_[0]
             self.weights = self.derivative_logistic(arr(self.Xs).dot(self.theta_mean))
             self.H = arr(self.XX).T.dot(self.weights)
-        
-        
-# clf.fit(X, Y)
-# print(clf.coef_)
-# clf.partial_fit(X, Y)
-# print(clf.coef_)
 
         if t % 100 == 0 and self.true_theta_4_debug is not None and i % 10 == 0:
             self.theta_acc.append(self.RMSE_theta(self.theta_mean))
