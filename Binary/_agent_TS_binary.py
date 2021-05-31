@@ -1,6 +1,5 @@
 from _util import *
 import copy
-# pip install thompson-sampling
 
 def beta_reparameterize(pi,phi_beta):
     return pi / phi_beta, (1 - pi) / phi_beta
@@ -12,7 +11,6 @@ class TS_agent():
     def __init__(self, u_prior_mean, prior_phi_beta):
         ### R ~ bernoulli(ri)
         ### ri~beta(mean, phi)
-        ### TODO: checkk the prior function
                 
         self.K = len(u_prior_mean)
         self.u_prior_alpha,self.u_prior_beta = beta_reparameterize(u_prior_mean, prior_phi_beta)
@@ -45,7 +43,6 @@ class N_TS_agent():
     def __init__(self, u_prior_mean, prior_phi_beta, N = 100):
         ### R ~ bernoulli(ri)
         ### ri~beta(mean, phi)
-        ### TODO: checkk the rior function
                 
         self.K = len(u_prior_mean)
         self.N = N
