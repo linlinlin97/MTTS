@@ -41,7 +41,6 @@ class MTB_agent():
         self.posterior_u_num, self.posterior_u_den, self.posterior_u, self.posterior_cov_diag = {}, {}, {}, {}
 
     def _init_else(self, K, p, N):
-        # Q: no prior? 
         # the two prior terms in the posterior
         if self.order == "concurrent" and self.approximate_solution:
             self.sampled_theta = np.random.multivariate_normal(self.theta_prior_mean, self.theta_prior_cov)
@@ -181,7 +180,6 @@ class MTB_agent():
             self.time_record["update_centered_R"] += (now() - a); a = now()
     
             self.A_4_each_task[i][A] += 1
-            #self.A_4_each_task[i].append(A)
             self.R_4_each_task[i].append(R)
             self.Sigma_idx[i][A] += 1
             
@@ -218,8 +216,6 @@ class MTB_agent():
                 self.tt += 1
                 return self.A
         elif self.tt >= 1 and (t < 10 or t % self.update_freq == 0): 
-#         and ((self.order == "episodic" and (i % self.update_freq == 0 or i < 10)) or (self.order == "concurrent" and (t % self.update_freq == 0 or t < 10))):
-#             if self.tt % self.update_freq == 0 and self.tt >= 1:
             self.update_Sigma_12_part(i)
             self.time_record["update_Sigma_12_part"] += (now() - a); a = now()
             self.compute_inverse()
@@ -244,7 +240,6 @@ class MTB_agent():
         
         self.Phi_obs_i[i] = np.vstack(self.Phi_obs[i])
         self.Phi_all = np.vstack(self.Phi_obs_i)
-        #self.Phi_all = self.vstack_list_of_list(self.Phi_obs)
         
     def collect_4_Sigma_12_part(self, i, R, A, x):
         idx = self.Sigma_idx[i][A]
@@ -292,8 +287,6 @@ class MTB_agent():
         if self.Sigma12[i].shape[1] == 1:
             self.Sigma12[i] = np.squeeze(self.Sigma12[i])
             
-#     def slow_inv(sigma, sigma_delta, l):
-#         return inv(sigma ** 2 * identity(l) + sigma_delta  ** 2 * ones((l, l)))
     def fast_inv(self, l):
         sigma, sigma_delta = self.sigma, np.sqrt(self.delta_cov[0, 0])
         return sigma ** -2 * identity(l) - sigma ** -4 * (sigma_delta ** -2 + sigma ** -2 * l) ** -1
@@ -304,33 +297,18 @@ class MTB_agent():
     def conca_list_of_list(self, list_of_list):
         return np.concatenate([np.concatenate([a for a in lis ]) for lis in list_of_list])
     
-    # def convert_to_block_diagonal(self, list_of_list):
-    #     out=np.array([])
-    #     for i in range(self.N):
-    #         for A in range(self.K):
-    #             if len(list_of_list[i][A])>0 and len(out)==0:
-    #                 out = list_of_list[i][A]
-    #             elif len(list_of_list[i][A])>0:
-    #                 out=scipy.linalg.block_diag(out,list_of_list[i][A])
-    #     return out
 
     def compute_inverse(self):
-        """ Checked. No bug here
-        Sigma for each i has no pattern. actually need for each (i, a)
-                
-        actually...under our model, it has a very simple form!
-        maintain for each (i,a) otherwise, different a together, not a naive block diagonal
-
-        I have checked. This is correct (J = 11 is wrong)
-        (J + sigma I)^{-1}
-        = sigma ** -2 * identity(K) - sigma ** -4 * (1 + sigma ** -2 * K) ** -1
+        """ 
+        (J_ia + sigma I)^{-1}
+        = sigma ** -2 * identity(N_ia) - sigma ** -4 * (sigma1 ** -2 + sigma ** 2 * N_ia) ** -1 * 11'
         """
         a = now()
         if self.order == "concurrent" and self.approximate_solution:
             for i, A in self.J_inv_to_be_updated:
                 N_i = j = self.Sigma_idx[i][A]
                 aa = self.K_delta_Cov_each_task[i][A][:(j), :(j)]
-                self.K_delta_Cov_each_task_sigmaI_inv[i][A] = self.fast_inv(j) #inv(aa + self.sigma ** 2 * np.identity(N_i))
+                self.K_delta_Cov_each_task_sigmaI_inv[i][A] = self.fast_inv(j) 
                 self.J_sigmaI_inv_dot_Phi_each[i][A] = self.K_delta_Cov_each_task_sigmaI_inv[i][A].dot(self.Phi_obs[i][A])
                 self.J_sigmaI_inv_dot_R_each[i][A] = self.K_delta_Cov_each_task_sigmaI_inv[i][A].dot(self.R_each_task[i][A])
             self.inv['J_sigmaI_inv_dot_Phi_all'] = self.vstack_list_of_list(self.J_sigmaI_inv_dot_Phi_each)
@@ -343,7 +321,6 @@ class MTB_agent():
                 self.K_delta_Cov_each_task_sigmaI_inv[i][A] = self.fast_inv(j) #inv(aa + self.sigma ** 2 * np.identity(N_i))
                 self.J_sigmaI_inv_dot_Phi_each[i][A] = self.K_delta_Cov_each_task_sigmaI_inv[i][A].dot(self.Phi_obs[i][A])
                 self.J_sigmaI_inv_dot_R_each[i][A] = self.K_delta_Cov_each_task_sigmaI_inv[i][A].dot(self.centered_R_each_task[i][A])
-    #             self.J_sigmaI_inv_dot_Phi_R_each[i] = self.J_sigmaI_inv_dot_Phi_each[i].T.dot(self.centered_R_each_task[i])
                 
             self.J_inv_to_be_updated = set()
             self.time_record["inv_inner"] += (now() - a); a = now()
@@ -413,21 +390,6 @@ class MTB_agent():
             return np.vstack([A, B])
 
 
-#     def _init_get_base_features(self):
-#         # assume the true features are given
-#         # Q: Phi?
-#         pass
-
-
-#     def generate_inverse(self):
-#         """ skip
-#         1. too much memory
-#         2. only for debug purpose
-#         """
-#         #aa1 = J_sigmaI_inv_dot_Phi_all.dot(inner_inv)
-#         #self.time_record["inv_block2"] += (now() - a); a = now()
-#         self.cov_R_inv = self.inv['J_sigmaI_inv'] - self.inv['J_sigmaI_inv_dot_Phi_all_dot_inner_inv'].dot(self.inv['J_sigmaI_inv_dot_Phi_all'].T)
-
 
 
     ################################################################################################################################################
@@ -436,7 +398,6 @@ class MTB_agent():
     def sample_theta(self):
         V_Phi = self.inv['J_sigmaI_inv_dot_Phi_all']
         V_R = self.inv['J_sigmaI_inv_dot_R']
-        #inv_V = self.inv['V'] #from compute inverse
         sigma_tilde= inv(self.Phi_all.T.dot(V_Phi)+self.theta_prior_cov)#from update Phi
         mean = sigma_tilde.dot(self.Phi_all.T.dot(V_R)+self.theta_prior_cov_inv.dot(self.theta_prior_mean))
         self.sampled_theta = np.random.multivariate_normal(mean, sigma_tilde)
@@ -470,10 +431,4 @@ class MTB_agent():
         total = sum(list(self.time_record.values()))
         a = {key : value for key, value in self.time_record.items() if value > total / 20}
         print(a)
-
-
-
-
-
-
 
