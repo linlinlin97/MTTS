@@ -1,9 +1,5 @@
 from _util import *
-#from _util_MTB import *
 
-
-
-""" TODO: compare with Gaussian """
 class Environment():
     @autoargs()
     def __init__(self, N, T, K, p_raw, p, phi_beta
@@ -61,11 +57,11 @@ class Environment():
         np.random.seed(self.seed)
         self.Rs = np.random.binomial(1, self.r, size = (T, N, K))
     
-    #get the obaseved R_it (complete) if i t a (complete)
+    #get the obaseved R_it if i t a 
     def get_reward(self, i, t, a):
         return self.Rs[t, i, a]
     
-    #get the observed reward if pulling the optimal arm (complete)
+    #get the observed reward if pulling the optimal arm
     def get_optimal_reward(self, i, t):
         a = self.optimal_arms[i]
         return self.Rs[t, i, a]
