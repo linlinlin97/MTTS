@@ -43,10 +43,14 @@ Within the folder `/Experiment_Scripts`, there are four scripts for different ex
 
 ## Script to Analyze the Results
 To generate the plots(figures) included in the paper, the following script is used.
-1. `Results_Plot.ipynb`: script to reproduce the **Figure2--6** in the main ;/.
+1. `Results_Plot.ipynb`: script to reproduce the **Figure2--6**/.
 
 ## Steps to Reproduce the Simulation Results
-
+1. Install the required packages or create a new environment using MTS.yml (Refer to the **Requirements**); 
+2. Download all the required codes in the same folder (Main Folder);
+3. Within the Main Folder, create two empty folders `/res` and `/log` to save simulation results and create another empty folder `/fig` to save figures;
+4. Run the corresponding experiment scripts;
+5. Analyze the results and get the figure by running the corresponding code in the `Results_Plot.ipynb`.
 
 ## Contributing
 
