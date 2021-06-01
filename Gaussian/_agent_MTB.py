@@ -398,7 +398,7 @@ class MTB_agent():
     def sample_theta(self):
         V_Phi = self.inv['J_sigmaI_inv_dot_Phi_all']
         V_R = self.inv['J_sigmaI_inv_dot_R']
-        sigma_tilde= inv(self.Phi_all.T.dot(V_Phi)+self.theta_prior_cov)#from update Phi
+        sigma_tilde= inv(self.Phi_all.T.dot(V_Phi)+inv(self.theta_prior_cov))#from update Phi
         mean = sigma_tilde.dot(self.Phi_all.T.dot(V_R)+self.theta_prior_cov_inv.dot(self.theta_prior_mean))
         self.sampled_theta = np.random.multivariate_normal(mean, sigma_tilde)
         
