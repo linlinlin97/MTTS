@@ -36,13 +36,14 @@ The following three code files, in the main folder, are used to conduct the expe
 
 ## Scripts to Conduct Experiments
 Within the folder `/Experiment_Scripts`, there are four scripts for different experiments corresponding to results discussed in the paper and Appendix.
-1. `Binary_Fig2.ipynb`: Script to reproduce the result in **Figure2**(Section 6) and **Figure5**(Section E.2) under Binary bandits setting.
-2. `Gaussian_Fig2.ipynb`: Script to reproduce the result in **Figure2**(Section 6) and **Figure4**(Section E.2) under Gaussian bandits setting.
-3. `Gaussian_KPN.ipynb`: Script to reproduce the result in **Figure6**(Appendix E.3) under Gaussian bandits setting.
-4. `Gaussian_Misspecify.ipynb`: Script to reproduce the result in **Figure3**(Appendix E.1) under Gaussian bandits setting.
+1. `Binary_Fig2.ipynb`: Script to reproduce the simulation results showed in **Figure2**(Section 6) and **Figure5**(Section E.2) under Binary bandits setting.
+2. `Gaussian_Fig2.ipynb`: Script to reproduce the simulation results showed in **Figure2**(Section 6) and **Figure4**(Section E.2) under Gaussian bandits setting.
+3. `Gaussian_Misspecify.ipynb`: Script to reproduce the simulation results showed in **Figure3**(Appendix E.1) under Gaussian bandits setting.
+4. `Gaussian_KPN.ipynb`: Script to reproduce the simulation results showed in **Figure6**(Appendix E.3) under Gaussian bandits setting.
 
 ## Script to Analyze the Results
-
+To generate the plots(figures) included in the paper, the following script is used.
+1. `Results_Plot.ipynb`: script to reproduce the **Figure2--6** in the main ;/.
 
 ## Steps to Reproduce the Simulation Results
 
