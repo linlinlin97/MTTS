@@ -1,5 +1,4 @@
 from _util import *
-# pip install thompson-sampling
 class TS_agent():
     """ in the experiment, we need to maintain N of them
     """
@@ -34,9 +33,6 @@ class TS_agent():
         self.posterior_u[A] = self.posterior_u_num[A] / self.posterior_u_den[A]
         self.posterior_cov_diag[A] = 1 / self.posterior_u_den[A]
         self.cnts[A] += 1
-"""
-Q: anything wrong with the posterior updating?
-"""
 
 
 class N_TS_agent():
