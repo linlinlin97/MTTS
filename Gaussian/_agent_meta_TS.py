@@ -8,7 +8,7 @@ otherwise: every time
 class meta_TS_agent():
     """ in the experiment, we need to maintain N of them
     after each interaction, we will update the prior!
-    when episodic, equalvalent
+    when episodic, equivalent
     """
     @autoargs()
     def __init__(self, sigma = 1, order = None
@@ -32,7 +32,6 @@ class meta_TS_agent():
         self.sigma_i_sqrt = [np.repeat(self.sigma1_square, N) for i in range(K)]
         
         self.sigma0 = np.sqrt(theta[K:].dot(theta[K:]) + sigma1_square)
-        #self.sigma0 = theta.dot(theta) + sigma1_square
         self.u_prior_cov = [self.sigma0 * identity(K) for i in range(N)]
 
         self.v = self.sigma ** -2
@@ -43,9 +42,6 @@ class meta_TS_agent():
         self.time_cost = [0, 0]
 
     def _init_posterior(self, N, K, p):
-        """ 
-        """
-        
         self.meta_post = {"u" : zeros(K), "cov_diag" : self.simga_q * ones(K) }
         self.sample_prior_mean()
         self.posterior_u_num_wo_prior_mean = [zeros(K) for i in range(N)]
@@ -97,9 +93,6 @@ class meta_TS_agent():
         """ 
         Posterior updated each time. 
         But not the mean in the posterior
-        TODO: 
-            2. do not loop
-            3. the overall schedule
         """
         for a in range(self.K):
             v_hat = 1 / self.meta_post['cov_diag'][a]
