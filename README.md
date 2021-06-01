@@ -13,7 +13,7 @@ conda env create -f MTS.yml
 ```
 >📋  Note: The first line of the yml file can be altered to set the new environment's name (i.e., python3). To activate the new environment, please use the following line of code: conda activate python3
 
-## Functions
+## Functions for Numerical Experiments
 ### MTTS Algorithms and Other Baseline Algorithms
 1. **Gaussian Bandits**: within the folder `/Gaussian`, there are codes for six different Thompson Sampling-based methods and a code to simulate data under the Gaussian bandits setting.
     1. `_agent_LB.py`: code to implement the Linear Bandits Algorithm. 
@@ -28,23 +28,19 @@ conda env create -f MTS.yml
     4. `_agent_meta_TS_binary.py`: code to implement meta Thompson sampling algorithm with slight modification, refer to `https://arxiv.org/pdf/2102.06129.pdf`
     5. `_envBin.py`: simulation environment of multi-task binary bandits with baseline features.
 
-### Other Codes Required to Run the Simulation
-The following two code files, in the main folder, are used to conduct the simulation study under both Gaussian bandits setting and Bernoulli bandits setting.
+### Other Functions Required
+The following three code files, in the main folder, are used to conduct the experiments and get the results under both Gaussian bandits setting and Bernoulli bandits setting.
 1. `_util.py`: helper functions
 2. `_experiement.py`: function to run the experiment under either the Gaussian bandits setting or the Bernoulli bandits setting.
+3. `_analyzer.py`: post-process simulation results
 
-## Experiments
-
-## Analysis
-
+## Scripts to Conduct Experiments
 
 
-
+## Script to Analyze the Results
 
 
 
-
-    1. `_analyzer.py`: post-process simulation results
 >📋  Describe how to evaluate the trained models on benchmarks reported in the paper, give commands that produce the results (section below).
 
 ## Pre-trained Models
