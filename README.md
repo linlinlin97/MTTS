@@ -29,8 +29,8 @@ conda env create -f MTS.yml
 
 ## Other Required Codes to Run the Simulation
 In the folder, there are three code files which are used to conduct the siulation study under both Gaussian bandits setting and Bernoulli bandits setting.
-    1. `_util.py`: helper functions
-    2. `_experiement.py`: function to run the experiment under either the Gaussian bandits setting or the Bernoulli bandits setting.
+1. `_util.py`: helper functions
+2. `_experiement.py`: function to run the experiment under either the Gaussian bandits setting or the Bernoulli bandits setting.
 
 ## Scripts for the Simulation Study
 
