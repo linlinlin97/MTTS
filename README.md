@@ -1,6 +1,6 @@
 # Metadata-based Multi-Task Bandits with Bayesian Hierarchical Models
 
-This repository is the official implementation of the paper [Metadata-based Multi-Task Bandits with Bayesian Hierarchical Models](https://arxiv.org) in Python. 
+This repository is the official implementation of the paper [Metadata-based Multi-Task Bandits with Bayesian Hierarchical Models]() in Python. 
 
 >📋  **Abstract**: How to explore efficiently is a central problem in multi-armed bandits. In this paper, we introduce the metadata-based multi-task bandit problem, where the agent needs to solve a large number of related multi-armed bandits tasks and can leverage some task-specific features (i.e., metadata) to share knowledge across tasks. As a general framework, we propose to capture task relations through the lens of Bayesian hierarchical models, upon which a Thompson sampling algorithm is designed to efficiently learn task relations, share information, and minimize the cumulative regrets. Two concrete examples for Gaussian bandits and Bernoulli bandits are carefully analyzed. The Bayes regret for Gaussian bandits clearly demonstrates the benefits of information sharing with our algorithm. The proposed method is further supported by extensive experiments.
 
@@ -51,7 +51,3 @@ To generate the plots(figures) included in the paper, the following script is us
 3. Within the Main Folder, create two empty folders `/res` and `/log` to save simulation results and create another empty folder `/fig` to save figures;
 4. Run the corresponding experiment scripts to get the simulation results;
 5. Analyze the results and get the figure by running the corresponding code in the `Results_Plot.ipynb`.
-
-## Contributing
-
->📋  Pick a licence and describe how to contribute to your code repository. 
