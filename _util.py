@@ -1,7 +1,4 @@
 #############################################################################
-# %matplotlib inline
-# !tar -czf data.zip data
-# !tar -czf code.zip code
 from zipfile import ZipFile
 from scipy.sparse.linalg import eigs
 from typing import Dict, List, Set, Tuple
@@ -10,15 +7,11 @@ import os
 os.environ["OMP_NUM_THREADS"] = "1"
 os.environ["OPENBLAS_NUM_THREADS"] = "1"
 from importlib import reload
-# import boto3
 import io
 import sys
 import warnings
 warnings.simplefilter("ignore")
 import logging
-# logging.warning('Hah')
-# from sagemaker import get_execution_role
-# role = get_execution_role()
 from IPython.display import display, clear_output, display_html
 import collections
 from types import MethodType
@@ -35,16 +28,12 @@ import copy
 import pymc3 as pm
 from pymc3.distributions import Interpolated
 
-
-# import shutil
-# shutil.rmtree("@@MTB@@/res/0316") 
 #############################################################################
 # Packages
 import scipy as sp
 import pandas as pd
 from pandas import DataFrame as DF
 import statsmodels.api as sm
-# import statsmodels as sm
 from matplotlib.pyplot import hist
 import pickle
 from scipy.stats import truncnorm
@@ -94,10 +83,6 @@ from sklearn.model_selection import KFold
 from sklearn.model_selection import GridSearchCV
 
 #############################################################################
-# import os
-# os.environ["OMP_NUM_THREADS"] = "1"
-# os.environ["OPENBLAS_NUM_THREADS"] = "1"
-
 np.set_printoptions(precision = 4)
 #############################################################################
 import time
@@ -184,7 +169,6 @@ def if_exist(obj):
 
 def getSize(one_object):
     print(one_object.memory_usage().sum() / 1024 ** 2, "MB")
-#     print(sys.getsizeof(one_object) // 1024, "MB")
 
 def dump(file, path):
     pickle.dump(file, open(path, "wb"))
@@ -241,13 +225,6 @@ def autoargs(*include, **kwargs):
     return _autoargs
 #############################################################################
 #############################################################################
-# pd.options.display.max_rows = 10
-
-# with open('pred_columns.txt', 'w') as filehandle:
-#     k = 0
-#     for listitem in list(a):
-#         filehandle.write('{}    {}\n'.format(k, listitem))
-#         k += 1
 
 def print_all(dat, column_only = True):
     if column_only:
@@ -283,15 +260,6 @@ def zip_folder(folder, zip_name):
             zf.write(os.path.join(dirname, filename))
     zf.close()
 
-            
-# import shutil
-
-# total, used, free = shutil.disk_usage("/")
-
-# print("Total: %d GiB" % (total // (2**30)))
-# print("Used: %d GiB" % (used // (2**30)))
-# print("Free: %d GiB" % (free // (2**30)))
-
 #############################################################################
 
 from termcolor import colored, cprint
@@ -310,7 +278,6 @@ def printB(theStr):
 text = colored('Hello, World!', 'green', attrs=['reverse', 'blink'])
 print(text)
 cprint('Hello, World!', 'green', 'on_red')
-
 """
     
 def sets_intersection(d):
