@@ -1,5 +1,4 @@
 from _util import *
-#from _util_MTB import *
 
 os.environ["OMP_NUM_THREADS"] = "1"
 os.environ["MKL_NUM_THREADS"] = "1"
@@ -23,10 +22,8 @@ reload(_agent_meta_TS)
 
 
 import Binary._envBin as _envBin
-#import _util_MTB as _util_MTB
 
 reload(_envBin)
-#reload(_util_MTB)
 
 import Binary._agent_MTB_binary as _agent_MTB_binary
 import Binary._agent_GLB as _agent_GLB
@@ -44,7 +41,6 @@ reload(_agent_meta_TS_binary)
 class Experiment():
     """ 
     main module for running the experimnet
-    
     """
     @autoargs()
     def __init__(self, N, T, K, p_raw, p, sigma, Sigma_delta
@@ -73,12 +69,6 @@ class Experiment():
         self.Xs = self.env.Phi # [N, K, p]
         self.r = self.env.r
         self.get_task_sequence()
-        
-        #self.agent = _agents.MTB_agent()
-    
-#     def eval_agent(self, name):
-#         pass
-        
    
     def _init_agents(self, agents = None):
         # sigma, Sigma_delta
@@ -91,7 +81,6 @@ class Experiment():
         self.record['regret'] = {name : [] for name in agent_names}
         self.record['meta_regret'] = {name : [] for name in agent_names}
 
-        #self.A_storage['oracle'] = []
 
     def get_task_sequence(self):
         self.task_sequence = []
@@ -103,13 +92,6 @@ class Experiment():
             for t in range(self.T):
                 for i in range(self.N):
                     self.task_sequence.append([i, t])
-#         if self.order == "random":
-#             self.ts = [0 for i in range(self.N)]
-#             for tt in range(self.all_T):
-#                 i = choice(self.N)
-#                 t = self.ts[i]
-#                 self.ts[i] += 1
-#                 self.task_sequence.append([i, t])
        
         
     def run(self):
@@ -125,7 +107,6 @@ class Experiment():
             if self.seed % 16 == 0:
                 for i, t in tqdm(self.task_sequence, desc = name
                                  , position=0
-#                                  , leave = 0
                                  , mininterval = 30
                                 , miniters = 20):
                     self.j += 1
@@ -213,8 +194,6 @@ class Experiment():
                           , n_boot = 100
                      , hue="method" # group variable
                     )
-#         ax.set(xlabel='common xlabel', ylabel='common ylabel')
-#         plt.show()
 
 ################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################
 
@@ -259,11 +238,6 @@ class run_experiment():
             self.names = ["OSFA"
                           , "MTB", "MTB-approx"
                           , "individual-TS", "oracle-TS", "linear-TS", "meta-TS"]
-
-        
-#         self.Sigma_theta[:K] *= 1000
-
-        ################
         if is_Binary:
             self.get_ri_prior_mean_prec(K, phi_beta)
         else:
@@ -380,9 +354,8 @@ class run_experiment():
         if self.only_ratio: 
             return [None, None] 
         # mean and phi
-        TS = _agent_TS_binary.TS_agent(u_prior_mean=self.ri_prior_mean_MC, prior_phi_beta=self.ri_prior_phi_MC) #  / 10000000
+        TS = _agent_TS_binary.TS_agent(u_prior_mean=self.ri_prior_mean_MC, prior_phi_beta=self.ri_prior_phi_MC) 
         N_TS = _agent_TS_binary.N_TS_agent(u_prior_mean=self.ri_prior_mean_MC, prior_phi_beta=self.ri_prior_phi_MC, N = N)
-#         N_TS = _agent_TS_binary.N_TS_agent(u_prior_mean= E_ri_thetai, prior_phi_beta= ri_prior_phi_MC_fixed_theta, N = N)
 
         meta_TS_agent = _agent_meta_TS_binary.meta_TS_agent(T = self.T, order = self.order
                                                      , theta_prior_mean = self.u_theta, theta_prior_cov = self.Sigma_theta
@@ -395,20 +368,9 @@ class run_experiment():
         meta_oracle = _agent_TS_binary.meta_oracle_agent(u_prior_alpha = self.exp.env.alpha_Beta, u_prior_beta = self.exp.env.beta_Beta)
         
         
-        ### theory - too large. as in their paper.
-#         u_max = 1 #1 / 4
-#         d = p - K + 1
-#         n = N * T
-#         sigma = 1 / 2
-#         alpha_theory = sigma * (1 / u_max) * np.sqrt(d * np.log(n / d) + 2 * np.log(n)) * np.sqrt(u_max) 
-        ## practical - as in their paper. 
-        alpha_practical = 1 #0.5
-#         if self.order == "episodic":
+        alpha_practical = 1 
         alpha = alpha_practical
-#         else:
-#             alpha = alpha_theory
-#         alpha = alpha_theory
-    
+
         GLB_agent = _agent_GLB.GLB_agent(N = N, K = K, p = p
                                         , alpha = alpha, retrain_freq = self.GLB_freq)
 
@@ -517,7 +479,6 @@ class run_experiment():
             , "meta-TS" :  meta_TS_agent
         }
         self.exp._init_agents(agents)
-#         self.names = list(agents.keys())
         
         self.exp.run()  
         self.record = {0: self.exp.record}  
@@ -534,12 +495,6 @@ class run_experiment():
         with open('log/{}.txt'.format(self.date_time), 'w') as f:
             print(self.title_settting, file=f)
 
-#         if batch == 1:
-#             if self.is_Binary:
-#                 record = parmap(self.run_one_seed_Binary, range(reps))
-#             else:
-#                 record = parmap(self.run_one_seed_Gaussian, range(reps))
-#         else:
         import ray
         if self.is_Binary:
             ray.shutdown()
@@ -551,7 +506,6 @@ class run_experiment():
                 os.environ["VECLIB_MAXIMUM_THREADS"] = "1" # export VECLIB_MAXIMUM_THREADS=1
                 os.environ["NUMEXPR_NUM_THREADS"] = "1" # export NUMEXPR_NUM_THREADS=1
                 r = self.run_one_seed_Binary(seed)
-#                 print("{} DONE!".format(seed))
                 return r
             ray.init()
             ###########
@@ -559,34 +513,13 @@ class run_experiment():
             record = ray.get(futures)
             ray.shutdown()
         else:
-#             ray.shutdown()
-#             @ray.remote(num_cpus = 3) # num_cpus = 3
-#             def one_seed(seed):
-#                 os.environ["OMP_NUM_THREADS"] = "1" # export OMP_NUM_THREADS=1
-#                 os.environ["OPENBLAS_NUM_THREADS"] = "1" # export OPENBLAS_NUM_THREADS=1
-#                 os.environ["MKL_NUM_THREADS"] = "1" # export MKL_NUM_THREADS=1
-#                 os.environ["VECLIB_MAXIMUM_THREADS"] = "1" # export VECLIB_MAXIMUM_THREADS=1
-#                 os.environ["NUMEXPR_NUM_THREADS"] = "1" # export NUMEXPR_NUM_THREADS=1
-#                 r = self.run_one_seed_Gaussian(seed)
-# #                 print("{} DONE!".format(seed))
-#                 return r
-#             ray.init()
-#             ###########
-#             futures = [one_seed.remote(j) for j in range(reps)]
-#             record = ray.get(futures)
-#             ray.shutdown()
-#             record = parmap(self.run_one_seed_Gaussian, range(reps))
             record = []
             for b in range(batch):
                 print("batch = {}".format(b))
-#                 if self.is_Binary:
-#                     r = parmap(self.run_one_seed_Binary, range(rep * b, rep * b + rep))
-#                 else:
                 r = parmap(self.run_one_seed_Gaussian, range(rep * b, rep * b + rep))
                 record += r
             self.record = record
         if not self.only_ratio: 
-#             self.exps = [r[0] for r in record]
             self.record = [r[0] for r in record]
             self.record_MTB = [r[1] for r in record]
         
@@ -646,7 +579,6 @@ class run_experiment():
             data_plot_BR.regret = data_plot_BR.regret / (data_plot_BR.time + 1)
             data_plot_meta.regret = data_plot_meta.regret / (data_plot_meta.time + 1)
 
-        # exp.plot_regret()
         if skip_methods is not None:
             for met in skip_methods:
                 data_plot_BR = data_plot_BR[data_plot_BR.method != met]
@@ -705,7 +637,6 @@ class run_experiment():
         """
         ########################################################
         date = get_date()
-    #         time = get_time()
 
         result_path = main_path + date
         fig_path = fig_path + date
