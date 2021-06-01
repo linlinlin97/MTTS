@@ -301,7 +301,7 @@ class MTB_agent():
     def compute_inverse(self):
         """ 
         (J_ia + sigma I)^{-1}
-        = sigma ** -2 * identity(N_ia) - sigma ** -4 * (sigma1 ** -2 + sigma ** 2 * N_ia) ** -1 * 11'
+        = sigma ** -2 * identity(N_ia) - sigma ** -4 * (sigma1 ** -2 + sigma ** -2 * N_ia) ** -1 * 11'
         """
         a = now()
         if self.order == "concurrent" and self.approximate_solution:
