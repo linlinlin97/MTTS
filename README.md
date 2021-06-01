@@ -14,29 +14,34 @@ conda env create -f MTS.yml
 >📋  Note: The first line of the yml file can be altered to set the new environment's name (i.e., python3). To activate the new environment, please use the following line of code: conda activate python3
 
 ## MTTS Algorithms and Other Baseline Algorithms
-1. **Gaussian Bandits**: within the folder `/Gaussian`, there are codes for five different Thompson Sampling-based methods under the Gaussian bandits setting.
+1. **Gaussian Bandits**: within the folder `/Gaussian`, there are codes for six different Thompson Sampling-based methods and a code to simulate data under the Gaussian bandits setting.
     1. `_agent_LB.py`: code to implement the Linear Bandits Algorithm. 
     2. `_agent_MTB.py`: code to implement the proposed algorithm MTTS. (Note: we use MTB and MTTS interchangeably)
     3. `_agent_TS.py`: code to implement basic Thompson Sampling Algorithms--OSFA(TS), individual-TS(N_TS), and oracle-TS(oracle)
     4. `_agent_meta_TS.py`: code to implement meta Thompson sampling algorithm with slight modification, refer to `https://arxiv.org/pdf/2102.06129.pdf`
     5. `_env.py`: simulation environment of multi-task Gaussian bandits with baseline features.
-2. **Bernoulli Bandits**: within the folder `/Binary`, there are codes for five different Thompson Sampling-based methods under the Bernoulli bandits setting.
+2. **Bernoulli Bandits**: within the folder `/Binary`, there are codes for six different Thompson Sampling-based methods and a code to simulate data under the Bernoulli bandits setting.
     1. `_agent_GLB.py`: code to implement the Generalized Linear Bandits Algorithm. Refer to `https://arxiv.org/pdf/1906.08947.pdf`
     2. `_agent_MTB_binary.py`: code to implement the proposed algorithm MTTS. (Note: we use MTB and MTTS interchangeably)
     3. `_agent_TS_binary.py`: code to implement basic Thompson Sampling Algorithms--OSFA(TS), individual-TS(N_TS), and oracle-TS(oracle)
     4. `_agent_meta_TS_binary.py`: code to implement meta Thompson sampling algorithm with slight modification, refer to `https://arxiv.org/pdf/2102.06129.pdf`
     5. `_envBin.py`: simulation environment of multi-task binary bandits with baseline features.
-  
->📋  Describe how to train the models, with example commands on how to train the models in your paper, including the full training procedure and appropriate hyperparameters.
 
-## Evaluation
+## Other Required Codes to Run the Simulation
+In the folder, there are three code files which are used to conduct the siulation study under both Gaussian bandits setting and Bernoulli bandits setting.
+    1. `_util.py`: helper functions
+    2. `_experiement.py`: function to run the experiment under either the Gaussian bandits setting or the Bernoulli bandits setting.
 
-To evaluate my model on ImageNet, run:
+## Scripts for the Simulation Study
 
-```eval
-python eval.py --model-file mymodel.pth --benchmark imagenet
-```
 
+
+
+
+
+
+
+    1. `_analyzer.py`: post-process simulation results
 >📋  Describe how to evaluate the trained models on benchmarks reported in the paper, give commands that produce the results (section below).
 
 ## Pre-trained Models
