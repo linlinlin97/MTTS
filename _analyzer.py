@@ -8,7 +8,6 @@ from matplotlib.transforms import BlendedGenericTransform
 from matplotlib.offsetbox import AnchoredText
 def get_tableau20():
     # These are the "Tableau 20" colors as RGB.   
-    # , (174, 199, 232)
     tableau20 = [(31, 119, 180), (255, 127, 14), (255, 187, 120),    
                  (44, 160, 44), (152, 223, 138), (214, 39, 40), (255, 152, 150),    
                  (148, 103, 189), (197, 176, 213), (140, 86, 75), (196, 156, 148),    
@@ -62,7 +61,6 @@ class Analyzer():
     def organize_Df(self, r_dict):
         T = len(r_dict[self.agent_names[0]])
         a = pd.DataFrame.from_dict(r_dict)
-        # a.reset_index(inplace=True)
         a = pd.melt(a)
         a['time'] = np.tile(np.arange(T), len(self.agent_names))
         a = a.rename(columns = {'variable':'method'
@@ -82,8 +80,6 @@ class Analyzer():
 
         n_methods = 7# - len(skip_methods)
 
-    #         self.labels_BR = ["individual-TS", "linear-TS", "oracle-TS", "meta-TS", "MTS"]
-    #         self.labels_MR = ["individual-TS", "linear-TS", "oracle-TS", "MTS"]
 
         reps = len(self.record)
 
@@ -124,9 +120,6 @@ class Analyzer():
         data_plot_BR = data_plot_BR.rename(columns = {'method':'Method'})
         data_plot_meta = data_plot_meta.rename(columns = {'method':'Method'})
 
-
-
-        # exp.plot_regret()
         skip_methods.append("oracle")
         if skip_methods is not None:
             for met in skip_methods:
@@ -150,8 +143,6 @@ class Analyzer():
                     , complex_x_label = True
                    ):
         from matplotlib.transforms import BlendedGenericTransform
-        #COLORS = sns.color_palette("Set1")
-#         COLORS = sns.color_palette()
         COLORS = get_tableau20() #sns.color_palette("tab10")
     
         if palette_idx is None:
@@ -192,7 +183,6 @@ class Analyzer():
                     , ax = ax1
                     , n_boot = 100
                     , palette = palette
-#                     , err_style = "bars" #“band” or “bars”
                     , linewidth = linewidth
                     , hue_order = hue_order
                     )
@@ -214,28 +204,11 @@ class Analyzer():
         ax1.set(ylim=(y_min, y_max))
         #########
         handles, labels = ax1.get_legend_handles_labels()
-#         self.ax1 = ax1
-#         plt.show()
         ax1.get_legend().remove()
     
 
 
         return handles, labels
-
-#         title_settting = " ".join([str(key) + "=" + str(self.setting[key]) for key in self.setting if type(key) in [str, int] and type(self.setting[key]) in [str, int, float]])
-#         printR(title_settting)
-        #self.fig.suptitle(title_settting, fontsize=12, y = 1.1)
-
-#         anc = AnchoredText(str(self.setting['order']) + "\n" + str(self.setting['sigma1_square']), loc="upper right", frameon=True
-# #                           , set_alpha =1
-#                           )
-#         ax1.add_artist(anc)
-
-    #                 , ncol=7, numpoints=1
-    #                 , fontsize = 16
-    #                             , title = "test"
-    #                     , labels= self.labels_BR
-    #             self.fig.legend(handles, labels, loc='lower center', ncol = len(labels))
 
     ####################################################################################################
     def save(self, fig_path = "fig/", sub_folder = [], no_legend = True):
@@ -264,9 +237,6 @@ class Analyzer():
 
         self.fig.savefig(fig_path + "/"  + path_settting + ".png"
                                , bbox_inches= 'tight'
-    #                      , dpi=200
-    #                      , bbox_extra_artists = ["y_label"]
-    #                      , pad_inches = 0
                         )
 
     ####################################################################################################
@@ -285,12 +255,4 @@ class Analyzer():
                     , bbox_inches= 'tight'
                     , pad_inches = 0
                         )
-#     def skim_recorder(self, path = None):
-#         full_recorded = load(path)
-#         record_R_only = {seed : r_one_seed['R'] for seed, r_one_seed in enumerate(full_recorded['record'])}
-        
-#         r = {"setting" : full_recorded["setting"]
-#              , "record": record_R_only}
-        
-#         dump(r, path)
 
