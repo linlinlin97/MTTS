@@ -10,11 +10,13 @@ import Gaussian._env as _env
 reload(_env)
 
 import Gaussian._agent_MTB as _agent_MTB
+#import Gaussian._agent_MTB_UCB as _agent_MTB_UCB
 import Gaussian._agent_LB as _agent_LB
 import Gaussian._agent_TS as _agent_TS
 import Gaussian._agent_meta_TS as _agent_meta_TS
 
 reload(_agent_MTB)
+#reload(_agent_MTB_UCB)
 reload(_agent_LB)
 reload(_agent_TS)
 
@@ -103,7 +105,7 @@ class Experiment():
 
     def run_4_one_agent(self, name):
         self.j = -1
-        if name in ["MTB", "GLB-TS", "MTB-approx"]: # 
+        if name in ["MTB", "GLB-TS", "MTB-approx", "MTB-UCB"]: # 
             if self.seed % 16 == 0:
                 for i, t in tqdm(self.task_sequence, desc = name
                                  , position=0
@@ -141,7 +143,7 @@ class Experiment():
             self.record['A'][name].append(A)
             # provide the reward to the agent
             if self.is_Binary:
-                if name in ["MTB", "meta-TS"] and self.order == "episodic":
+                if name in ["MTB", "meta-TS", "MTB-UCB"] and self.order == "episodic":
                     self.agents[name].receive_reward(i, t, A, R, X, t == self.T - 1)
                 else:
                     self.agents[name].receive_reward(i, t, A, R, X)
@@ -236,7 +238,7 @@ class run_experiment():
             self.names = ["OSFA", "MTB", "individual-TS", "oracle-TS", "GLB-TS", "meta-TS"]
         else:
             self.names = ["OSFA"
-                          , "MTB", "MTB-approx"
+                          , "MTB", "MTB-approx", "MTB-UCB"
                           , "individual-TS", "oracle-TS", "linear-TS", "meta-TS"]
         if is_Binary:
             self.get_ri_prior_mean_prec(K, phi_beta)
@@ -467,12 +469,22 @@ class run_experiment():
                     , update_freq = self.MTS_freq # performance will degenerate
                     , approximate_solution = True
                     )
+        
+        MTB_UCB_agent = _agent_MTB.MTB_agent(sigma = sigma, order=self.order
+                     , theta_prior_mean = self.u_theta, theta_prior_cov = self.Sigma_theta
+                    , T = self.T
+                     , delta_cov = self.Sigma_delta #np.identity(K)
+                     , Xs = self.exp.Xs # # [N, K, p]
+                    , update_freq = self.MTS_freq # performance will degenerate
+                    , UCB_solution = True                         
+                    )
 
         ####################################################################################################
         agents = {
             "OSFA" : TS
             , "MTB" : MTB_agent
             , "MTB-approx": MTB_agent_approx
+            , "MTB-UCB": MTB_UCB_agent
             , "individual-TS" : N_TS
             , "oracle-TS" : meta_oracle
             , "linear-TS" : LB_agent
