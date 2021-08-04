@@ -18,6 +18,7 @@ class MTB_agent():
                  , Xs = None # [N, K, p]
                  , update_freq = 1
                  , approximate_solution = False
+                 , UCB_solution = False
                 ):
         self.K = K = len(delta_cov)
         self.N = N = len(Xs)
@@ -222,7 +223,13 @@ class MTB_agent():
             self.time_record["compute_inverse"] += (now() - a); a = now()
             self.update_posterior(i)
             self.time_record["update_posterior"] += (now() - a); a = now()
-            
+        
+        if self.UCB_solution:
+            self.sampled_Rs = self.ri_mean_post[i] + 1.96 * np.diag(self.ri_cov_post[i]) / np.sqrt(np.sum(self.cnts,axis=0))
+            self.A = np.argmax(self.sampled_Rs)
+            self.tt += 1
+            return self.A
+        
         self.sampled_Rs = np.random.multivariate_normal(self.ri_mean_post[i], self.ri_cov_post[i])
         self.A = np.argmax(self.sampled_Rs)
         self.tt += 1
